@@ -105,4 +105,11 @@ defmodule Ecto.Integration.ConstraintsTest do
       |> PoolRepo.insert()
     assert is_integer(changeset.id)
   end
+
+  test "array_position breaks" do
+    import Ecto.Query
+    PoolRepo.all(
+      from c in Constraint, select: fragment("array_position(?, ?)", type(^[1,2,3], {:array, c.id}), c.id)
+    )
+  end
 end
